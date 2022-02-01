@@ -1,0 +1,57 @@
+#
+# Example Tackle package schema
+#
+# This files contains an example schema for a Tackle package, and 
+# attempts to explain what the schema is and how it is used.
+
+# The top of the schema defines basic meta information, such as
+# the name of the package, the version of the package, and a 
+# description of what this package does.
+
+name = "My cool hook"
+description = "Description of what your cool hook does"
+version = "1.0.0"
+
+# The tasks lists defines commands to execute at certain times.
+# Available tasks are:
+#	- postinstall: executed after the installation of the hook
+#	- preuninstall: executed before the uninstallation of the hook
+[tasks]
+postinstall = ["yarn add -D -W eslint"]
+
+# The hooks table defines the commands to run on each git event.
+# Hooks are run in order of definition, unless the conditions for
+# a hook to execute are not met.
+
+# You can define your hooks using the key-value syntax:
+[hooks]
+precommit = [
+	{ id = "npm-eslint", dependencies = ["npm"], command = "npm lint" }
+]
+
+# Or, you can use the shorthand syntax:
+[[hooks.precommit]]
+id = "yarn-eslint"
+dependencies = ["yarn"]
+command = "yarn lint"
+
+# Conditions determine whether a hook should be run. Conditions are evaluated 
+# in order, and the first matching condition will cause the hook to run.e
+
+# Available conditions are:
+#	- always: always run the hook (default)
+#	- never: never run the hook (???)
+
+#   - successful: run the hook if the previous command was successful
+#   - failed: run the hook if the previous command failed
+
+#   - branch: run the hook if the current branch matches the specified branch
+#   - tag: run the hook if the current tag matches the specified tag
+
+#   - exists: run the hook if the specified file exists
+#   - notexists: run the hook if the specified file does not exist
+
+conditions = [
+	{ failed = ["npm-eslint"] },
+	{ branch = "master", successful = [""] }
+]

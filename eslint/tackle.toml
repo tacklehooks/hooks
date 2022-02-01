@@ -1,0 +1,34 @@
+name = "eslint"
+description = "Run eslint on staged files"
+version = "1.0.0"
+
+# NPM
+[[hooks.precommit]]
+id = "npm-eslint"
+dependencies = ["npm"]
+command = ["npm run eslint --fix ."]
+
+[[hooks.precommit.conditions]]
+exists = ["package.json", "package-lock.json"]
+
+# Yarn
+[[hooks.precommit]]
+id = "yarn-eslint"
+dependencies = ["yarn"]
+command = ["yarn eslint ."]
+
+[[hooks.precommit.conditions]]
+exists = ["package.json", "yarn.lock"]
+skipped = ["npm-eslint"]
+
+# PNPM
+[[hooks.precommit]]
+dependencies = ["pnpm"]
+command = ["pnpm run eslint --fix ."]
+
+[[hooks.precommit.conditions]]
+exists = ["package.json", "pnpm-lock.yaml"]
+skipped = ["npm-eslint"]
+
+[[hooks.precommit]]
+error = ""
